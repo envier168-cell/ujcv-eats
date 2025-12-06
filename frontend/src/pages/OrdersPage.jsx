@@ -15,8 +15,8 @@ export default function OrdersPage() {
   }, [])
 
   const repeatOrder = (order) => {
-    localStorage.setItem('cartItems', JSON.stringify(order.items))
-    localStorage.setItem('selectedRestaurant', JSON.stringify(order.restaurant))
+    localStorage.setItem('cartItems', JSON.stringify(order.items ?? []))
+    localStorage.setItem('selectedRestaurant', JSON.stringify(order.restaurant ?? {}))
     show(`🔄 Pedido #${order.id} agregado nuevamente al carrito`, 'info', 2500)
   }
 
@@ -98,22 +98,22 @@ export default function OrdersPage() {
               <p style={{ marginTop: '0.25rem', color: '#666' }}>
                 Restaurante: <strong>{order.restaurant?.name ?? 'Desconocido'}</strong>
               </p>
-              <p>Fecha: {order.date}</p>
+              <p>Fecha: {order.date ?? 'Sin fecha'}</p>
               <p>
                 Estado: <span className={`order-status ${
                   order.status === 'Pendiente' ? 'pending' :
                   order.status === 'Entregado' ? 'delivered' : 'cancelled'
                 }`}>
-                  {order.status}
+                  {order.status ?? 'Sin estado'}
                 </span>
               </p>
               <ul style={{ marginTop: '0.5rem' }}>
-                {order.items.map((item, i) => (
-                  <li key={i}>{item.name} — Lps {item.price.toFixed(2)}</li>
+                {order.items?.map((item, i) => (
+                  <li key={i}>{item.name} — Lps {(item.price ?? 0).toFixed(2)}</li>
                 ))}
               </ul>
               <p style={{ marginTop: '0.5rem', fontWeight: 'bold' }}>
-                Total: Lps {order.total.toFixed(2)}
+                Total: Lps {(order.total ?? 0).toFixed(2)}
               </p>
               <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.5rem' }}>
                 <button onClick={() => repeatOrder(order)} className="button-repeat">
