@@ -1,0 +1,16 @@
+{
+  "restaurants": [
+    { "id": 1, "name": "Burger King", "address": "Comayagua Centro" },
+    { "id": 2, "name": "Pizza Hut", "address": "Boulevard Comayagua" }
+  ],
+  "menu": [
+    { "id": 1, "restaurantId": 1, "name": "Whopper", "description": "Hamburguesa clásica con carne de res", "price": 120 },
+    { "id": 2, "restaurantId": 2, "name": "Pizza Suprema", "description": "Pizza con pepperoni, vegetales y queso extra", "price": 250 }
+  ],
+  "orders": [],
+  "favorites": [
+    { "id": 101, "name": "Whopper", "description": "Hamburguesa clásica con carne de res", "price": 120 },
+    { "id": 102, "name": "Pizza Suprema", "description": "Pizza con pepperoni, vegetales y queso extra", "price": 250 },
+    { "id": 103, "name": "Pollo Frito", "description": "Crocante y jugoso, acompañado de papas fritas", "price": 150 }
+  ]
+}

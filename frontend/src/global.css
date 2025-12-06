@@ -1,0 +1,517 @@
+/* Tipografía moderna y fondo base */
+body {
+  font-family: 'Poppins', 'Roboto', sans-serif;
+  background-color: #f9fafb; /* gris muy claro */
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Encabezados */
+h1, h2, h3 {
+  font-weight: 600;
+  color: #222;
+}
+
+/* Botones modernos (estilo global por defecto) */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  background: linear-gradient(135deg, #4f46e5, #6366f1); /* azul violeta */
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Tarjetas (restaurantes y productos) */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 1rem;
+  margin: 1rem 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  color: #2563eb; /* azul */
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #1e40af; /* azul más oscuro */
+}
+
+/* Toasts */
+/* Toasts */
+.toast {
+  background: #333;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* Temas por restaurante */
+.restaurant-mcdonalds { --primary-color: #dc2626; --secondary-color: #facc15; }
+.restaurant-burgerking { --primary-color: #f59e0b; --secondary-color: #e11d48; }
+.restaurant-pizzahut { --primary-color: #16a34a; --secondary-color: #ef4444; }
+
+.restaurant-theme h1,
+.restaurant-theme h2 { color: var(--primary-color); }
+
+.restaurant-theme button {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.restaurant-theme button:hover {
+  background: var(--secondary-color);
+}
+
+/* Botones de accesos rápidos */
+.quick-button {
+  flex: 1;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.quick-button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Variantes de color */
+.quick-top { background: #ffc107; color: #000; }
+.quick-tracking { background: #17a2b8; color: #fff; }
+.quick-checkout { background: #28a745; color: #fff; }
+.quick-orders { background: #007bff; color: #fff; }
+
+/* CheckoutPage */
+.button-confirm {
+  padding: 0.75rem 1.5rem;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.button-confirm:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.button-remove {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #dc3545;
+}
+
+.button-remove:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+.button-clear {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #dc3545;
+}
+
+.button-clear:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+/* OrdersPage */
+.button-filter {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.button-filter:hover {
+  background-color: #f3f4f6;
+}
+
+.button-filter.active {
+  background-color: #6f42c1;
+  color: #fff;
+}
+
+.button-repeat {
+  padding: 0.5rem 1rem;
+  background: #6f42c1;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.button-delivered {
+  padding: 0.5rem 1rem;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.button-cancel {
+  padding: 0.5rem 1rem;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.order-card {
+  position: relative;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.order-status {
+  font-weight: bold;
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.order-status.pending { background: #fff3cd; color: #856404; }
+.order-status.delivered { background: #d4edda; color: #155724; }
+.order-status.cancelled { background: #f8d7da; color: #721c24; }
+
+/* Botón de añadir al carrito (versión morado pastel, ancho completo) */
+.button-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;                  /* ocupa todo el ancho de la card */
+  padding: 1rem;
+  background: #c084fc;          /* morado pastel */
+  color: #fff;
+  border: none;
+  border-radius: 0 0 12px 12px; /* redondeado solo en la parte inferior */
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.button-add:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+.button-add span {
+  color: inherit;
+}
+
+.restaurant-theme .button-add {
+  background: #c084fc !important; /* morado pastel */
+  color: #fff !important;
+}
+
+/* TopFavoritesPage */
+.card-favorite {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-favorite:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.card-favorite h2 { margin: 0; }
+.card-favorite p { margin: 0.25rem 0; color: #555; }
+.card-favorite span { font-size: 1.5rem; }
+
+/* TrackingPage */
+.progress-container { margin-bottom: 1.5rem; }
+
+.progress-emojis {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.progress-emojis div {
+  text-align: center;
+  flex: 1;
+}
+
+.progress-emojis span { font-size: 1.5rem; }
+
+.progress-bar {
+  display: flex;
+  height: 12px;
+  background: #eee;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-step { flex: 1; }
+.progress-step.yellow { background: #ffc107; }
+.progress-step.blue { background: #17a2b8; }
+.progress-step.green { background: #28a745; }
+
+.delivery-card {
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #f9f9f9;
+}
+
+.delivery-card h3 { margin-top: 0; }
+.delivery-card p { margin: 0.25rem 0; }
+
+/* UserInfoPage */
+.input-field {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.button-login {
+  padding: 0.75rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.button-login:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* UserDropdown */
+.dropdown-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  min-width: 220px;
+}
+
+.dropdown-menu p {
+  margin: 0.25rem 0;
+  color: #333;
+}
+
+.button-logout {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.5rem;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.button-logout:hover {
+  opacity: 0.9;
+}
+
+/* Animación para el menú desplegable */
+@keyframes dropdownFadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  min-width: 220px;
+
+  /* Animación */
+  animation: dropdownFadeSlide 0.25s ease forwards;
+}
+
+/* Animaciones para el menú desplegable */
+@keyframes dropdownFadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdownFadeSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Estado visible */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  min-width: 220px;
+  animation: dropdownFadeSlideIn 0.25s ease forwards;
+}
+
+/* Estado oculto (cuando se cierra) */
+.dropdown-menu.hide {
+  animation: dropdownFadeSlideOut 0.25s ease forwards;
+}
+
+/* Animaciones con react-transition-group */
+.dropdown-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.dropdown-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.dropdown-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.dropdown-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Splash screen */
+.splash-container {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  transition: opacity 1s ease; /* transición suave */
+}
+
+.splash-container.fade-out {
+  opacity: 0; /* se desvanece */
+}
+
+.splash-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
