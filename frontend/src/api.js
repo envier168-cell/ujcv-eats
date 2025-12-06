@@ -75,3 +75,9 @@ export async function clearOrders() {
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   return res.json()
 }
+
+export async function fetchTracking(orderId) {
+  const res = await fetch(`${API_URL}/tracking/${orderId}`)
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  return res.json()
+}
