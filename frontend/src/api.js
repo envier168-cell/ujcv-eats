@@ -27,6 +27,13 @@ export async function fetchFavorites() {
   return res.json()
 }
 
+// ⭐ Top Favoritos
+export async function fetchTopFavorites() {
+  const res = await fetch(`${API_URL}/favorites/top`)
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  return res.json()
+}
+
 // 📜 Pedidos
 export async function fetchOrders() {
   const res = await fetch(`${API_URL}/orders`)
