@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useToast } from '../context/useToast'
-import { createOrder } from '../api'   // ✅ Importa la función centralizada
+import { createOrder } from '../api'
 
 export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState([])
@@ -14,7 +14,7 @@ export default function CheckoutPage() {
 
   const total = cartItems.reduce((sum, item) => sum + item.price, 0)
 
-  // 🔹 Confirmar pedido
+  // Confirmar pedido
   const confirmOrder = async () => {
     if (cartItems.length === 0) {
       show('⚠️ No hay productos en el carrito', 'info', 2500)
@@ -29,7 +29,7 @@ export default function CheckoutPage() {
     }
 
     try {
-      const savedOrder = await createOrder(order)   // ✅ Usa la función de api.js
+      const savedOrder = await createOrder(order)
       show(`✅ Pedido #${savedOrder.id} confirmado en servidor`, 'success', 3000)
 
       localStorage.removeItem('cartItems')
@@ -40,14 +40,14 @@ export default function CheckoutPage() {
     }
   }
 
-  // 🔹 Vaciar carrito completo
+  // Vaciar carrito completo
   const clearCart = () => {
     localStorage.removeItem('cartItems')
     setCartItems([])
     show('🗑️ Carrito vaciado', 'info', 2500)
   }
 
-  // 🔹 Eliminar producto específico
+  // Eliminar producto específico
   const removeItem = (index) => {
     const updatedCart = cartItems.filter((_, i) => i !== index)
     setCartItems(updatedCart)
@@ -56,8 +56,8 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: '1rem' }}>
-      <h1 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className="cart-container">
+      <h1 className="cart-title">
         Carrito de compras
         {cartItems.length > 0 && (
           <button onClick={clearCart} className="button-clear" title="Vaciar carrito">
@@ -73,7 +73,8 @@ export default function CheckoutPage() {
       ) : (
         <div style={{ marginTop: '1rem', display: 'grid', gap: '0.75rem' }}>
           {cartItems.map((item, index) => (
-            <div key={index} className="card" style={{ position: 'relative' }}>
+            <div key={index} className="cart-item">
+              {/* ❌ botón para eliminar producto */}
               <button
                 onClick={() => removeItem(index)}
                 className="button-remove"
@@ -82,15 +83,29 @@ export default function CheckoutPage() {
                 ❌
               </button>
 
-              <h2>{item.name}</h2>
-              <p style={{ marginTop: '0.25rem', color: '#666' }}>{item.description}</p>
-              <p><strong>Lps {item.price.toFixed(2)}</strong></p>
+              {/* Producto */}
+              <h2 className="cart-item-name">{item.name}</h2>
+              <p className="cart-item-description">{item.description}</p>
+
+              {/* Restaurante */}
+              {item.restaurant && (
+                <p className="cart-item-restaurant">
+                  Restaurante: <strong>{item.restaurant}</strong>
+                </p>
+              )}
+
+              {/* Precio individual */}
+              <p className="cart-item-price">Lps {item.price.toFixed(2)}</p>
             </div>
           ))}
-          <p style={{ fontSize: '1.2rem', marginTop: '1rem' }}>
+
+          {/* Total general */}
+          <p className="cart-total">
             Total: <strong>Lps {total.toFixed(2)}</strong>
           </p>
-          <button onClick={confirmOrder} className="button-confirm">
+
+          {/* Confirmar pedido */}
+          <button onClick={confirmOrder} className="cart-confirm-button">
             Confirmar pedido
           </button>
         </div>

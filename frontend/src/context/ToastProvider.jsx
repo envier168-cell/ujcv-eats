@@ -6,7 +6,9 @@ export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([])
 
   const show = (message, type = 'info', duration = 3000) => {
-    const id = Date.now()
+    // 🔹 Genera un id único combinando timestamp + random
+    const id = `${Date.now()}-${Math.random()}`
+
     setToasts(prev => [...prev, { id, message, type }])
 
     setTimeout(() => {

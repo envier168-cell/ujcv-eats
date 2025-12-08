@@ -1,7 +1,7 @@
 /* Tipografía moderna y fondo base */
 body {
   font-family: 'Poppins', 'Roboto', sans-serif;
-  background-color: #f9fafb; /* gris muy claro */
+  background-color: #f9fafb;
   color: #333;
   margin: 0;
   padding: 0;
@@ -13,6 +13,17 @@ h1, h2, h3 {
   color: #222;
 }
 
+/* Links */
+a {
+  text-decoration: none;
+  color: #2563eb;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #1e40af;
+}
+
 /* Botones modernos (estilo global por defecto) */
 button {
   cursor: pointer;
@@ -20,7 +31,7 @@ button {
   border-radius: 8px;
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
-  background: linear-gradient(135deg, #4f46e5, #6366f1); /* azul violeta */
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
   color: #fff;
   transition: all 0.3s ease;
 }
@@ -38,25 +49,17 @@ button:hover {
   padding: 1rem;
   margin: 1rem 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  overflow: hidden;
+  background-color: #f9f9f9;
 }
 
 .card:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  background-color: #eaeaea;
 }
 
-/* Links */
-a {
-  text-decoration: none;
-  color: #2563eb; /* azul */
-  transition: color 0.2s ease;
-}
-
-a:hover {
-  color: #1e40af; /* azul más oscuro */
-}
-
-/* Toasts */
 /* Toasts */
 .toast {
   background: #333;
@@ -72,7 +75,6 @@ a:hover {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 
 /* Temas por restaurante */
 .restaurant-mcdonalds { --primary-color: #dc2626; --secondary-color: #facc15; }
@@ -108,11 +110,43 @@ a:hover {
   opacity: 0.9;
 }
 
-/* Variantes de color */
+/* Variantes de color para quick-buttons */
 .quick-top { background: #ffc107; color: #000; }
 .quick-tracking { background: #17a2b8; color: #fff; }
 .quick-checkout { background: #28a745; color: #fff; }
 .quick-orders { background: #007bff; color: #fff; }
+
+/* Botón de añadir al carrito */
+.button-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  background: #c084fc;
+  color: #fff;
+  border: none;
+  border-radius: 0 0 12px 12px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.button-add:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+.button-add span {
+  color: inherit;
+}
+
+.restaurant-theme .button-add {
+  background: #c084fc !important;
+  color: #fff !important;
+}
 
 /* CheckoutPage */
 .button-confirm {
@@ -124,22 +158,31 @@ a:hover {
   cursor: pointer;
   font-size: 1rem;
   transition: transform 0.2s ease, opacity 0.2s ease;
+  display: block;
+  width: 100%;
+  font-weight: bold;
+  margin-top: 1.5rem;
 }
 
 .button-confirm:hover {
   transform: scale(1.05);
   opacity: 0.9;
+  background-color: #218838;
+}
+
+.button-remove,
+.button-clear {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #dc3545;
 }
 
 .button-remove {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
   font-size: 1.2rem;
-  color: #dc3545;
 }
 
 .button-remove:hover {
@@ -148,11 +191,7 @@ a:hover {
 }
 
 .button-clear {
-  background: transparent;
-  border: none;
-  cursor: pointer;
   font-size: 1.5rem;
-  color: #dc3545;
 }
 
 .button-clear:hover {
@@ -233,38 +272,6 @@ a:hover {
 .order-status.pending { background: #fff3cd; color: #856404; }
 .order-status.delivered { background: #d4edda; color: #155724; }
 .order-status.cancelled { background: #f8d7da; color: #721c24; }
-
-/* Botón de añadir al carrito (versión morado pastel, ancho completo) */
-.button-add {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;                  /* ocupa todo el ancho de la card */
-  padding: 1rem;
-  background: #c084fc;          /* morado pastel */
-  color: #fff;
-  border: none;
-  border-radius: 0 0 12px 12px; /* redondeado solo en la parte inferior */
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.button-add:hover {
-  transform: scale(1.02);
-  opacity: 0.9;
-}
-
-.button-add span {
-  color: inherit;
-}
-
-.restaurant-theme .button-add {
-  background: #c084fc !important; /* morado pastel */
-  color: #fff !important;
-}
 
 /* TopFavoritesPage */
 .card-favorite {
@@ -378,6 +385,11 @@ a:hover {
   z-index: 1000;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   min-width: 220px;
+  animation: dropdownFadeSlideIn 0.25s ease forwards;
+}
+
+.dropdown-menu.hide {
+  animation: dropdownFadeSlideOut 0.25s ease forwards;
 }
 
 .dropdown-menu p {
@@ -399,34 +411,6 @@ a:hover {
 
 .button-logout:hover {
   opacity: 0.9;
-}
-
-/* Animación para el menú desplegable */
-@keyframes dropdownFadeSlide {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
-  z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  min-width: 220px;
-
-  /* Animación */
-  animation: dropdownFadeSlide 0.25s ease forwards;
 }
 
 /* Animaciones para el menú desplegable */
@@ -452,27 +436,6 @@ a:hover {
   }
 }
 
-/* Estado visible */
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
-  z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  min-width: 220px;
-  animation: dropdownFadeSlideIn 0.25s ease forwards;
-}
-
-/* Estado oculto (cuando se cierra) */
-.dropdown-menu.hide {
-  animation: dropdownFadeSlideOut 0.25s ease forwards;
-}
-
-/* Animaciones con react-transition-group */
 .dropdown-enter {
   opacity: 0;
   transform: translateY(-10px);
@@ -503,11 +466,11 @@ a:hover {
   justify-content: center;
   align-items: center;
   z-index: 2000;
-  transition: opacity 1s ease; /* transición suave */
+  transition: opacity 1s ease;
 }
 
 .splash-container.fade-out {
-  opacity: 0; /* se desvanece */
+  opacity: 0;
 }
 
 .splash-video {
@@ -515,3 +478,103 @@ a:hover {
   height: 100%;
   object-fit: cover;
 }
+
+.menu-button {
+  width: 100%;
+  padding: 0.85rem;
+  background-color: #00BFFF;
+  color: #fff;
+  text-align: center;
+  border: none;
+  border-radius: 0;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.menu-button:hover {
+  background-color: #009ACD;
+}
+
+.menu-button:active {
+  transform: scale(0.95);
+}
+
+.restaurant-image-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 1rem;
+  min-height: 160px;
+}
+
+.restaurant-image {
+  max-height: 140px;
+  width: auto;
+  object-fit: contain;
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.restaurant-image:hover {
+  transform: scale(1.05);
+}
+
+/* Contenedor principal del carrito */
+.cart-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Título */
+.cart-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Ítems del carrito */
+.cart-item {
+  position: relative;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cart-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.cart-item h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.cart-item p {
+  margin: 0.25rem 0;
+  color: #555;
+}
+
+/* Total */
+.cart-total {
+  text-align: right;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+

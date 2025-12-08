@@ -1,37 +1,35 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useToast } from '../context/ToastProvider'
+import { useAuth } from '../context/AuthContext'
 
-export default function RegisterPage() {
+function RegisterPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [accountNumber, setAccountNumber] = useState('')
-  const [address, setAddress] = useState('Dirección automática de ejemplo')
-  const navigate = useNavigate()
+  const [address] = useState('Dirección automática de ejemplo')
   const { show } = useToast()
+  const { login } = useAuth()
 
   const handleRegister = () => {
-    // 🔹 Guardar datos en localStorage aunque estén vacíos
-    localStorage.setItem('userInfo', JSON.stringify({
-      name: name || 'Usuario de ejemplo',
-      email: email || 'correo@ejemplo.com',
-      accountNumber: accountNumber || '0000000000',
+    if (!name || !email || !accountNumber) {
+      show('⚠️ Completa todos los campos antes de registrarte', 'error', 4000)
+      return
+    }
+
+    const userData = {
+      name,
+      email,
+      accountNumber,
       address
-    }))
+    }
 
-    // ✅ Toast de confirmación
-    show('✅ Registro de ejemplo completado', 'success', 3000)
-
-    // ✅ Toast de aviso de proyecto de ejemplo
-    show('⚠️ Este es un proyecto de ejemplo. Los datos no son reales ni se validan.', 'info', 5000)
-
-    navigate('/') // Redirige al menú principal
+    login(userData)
+    show('✅ Registro completado', 'success', 3000)
   }
 
   return (
     <div style={{ maxWidth: 400, margin: '0 auto', padding: '1rem' }}>
       <h1>📝 Registro de usuario</h1>
-
       <div style={{ display: 'grid', gap: '0.75rem', marginTop: '1rem' }}>
         <input
           type="text"
@@ -62,3 +60,5 @@ export default function RegisterPage() {
     </div>
   )
 }
+
+export default RegisterPage
