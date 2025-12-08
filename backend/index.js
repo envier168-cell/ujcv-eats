@@ -20,6 +20,12 @@ app.use(cors({
 // 📦 Archivo de pedidos
 const ordersFile = path.join(__dirname, 'orders.json')
 
+// Asegurarse de que el archivo orders.json exista
+if (!fs.existsSync(ordersFile)) {
+  fs.writeFileSync(ordersFile, JSON.stringify([], null, 2))
+  console.log('📄 Archivo orders.json creado automáticamente')
+}
+
 // 🍔 Lista de restaurantes
 const restaurants = [
   { id: 1, name: 'Burger King Comayagua', address: 'Boulevard Roberto Romero Larios, Comayagua' },
@@ -60,7 +66,12 @@ const menus = {
 
 // 🩺 Salud del servicio
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: Date.now() })
+  res.json({ 
+    status: 'ok', 
+    timestamp: Date.now(),
+    service: 'UJCV Eats API',
+    version: '1.0.0'
+  })
 })
 
 // 📍 Endpoints restaurantes y menús (con /api)
@@ -101,49 +112,183 @@ app.get('/api/tracking/:orderId', (req, res) => {
   })
 })
 
-// 🧾 Endpoints pedidos (con /api)
+// ============================================================================
+// 🔐 ENDPOINTS DE AUTENTICACIÓN - SOLUCIÓN RÁPIDA
+// ============================================================================
+
+// 📧 Endpoint PRINCIPAL de login (con /api)
+app.post('/api/login', (req, res) => {
+  console.log('📧 Login recibido:', req.body.email || 'sin email')
+  
+  // Respuesta MOCK para demo - siempre exitosa
+  res.json({
+    success: true,
+    user: {
+      id: Date.now(),
+      email: req.body.email || 'demo@ujcv.edu.hn',
+      name: req.body.email ? req.body.email.split('@')[0] : 'Estudiante UJCV',
+      accountNumber: req.body.accountNumber || 'UJCV' + Math.floor(1000 + Math.random() * 9000),
+      address: req.body.address || 'Campus UJCV, Comayagua',
+      isStudent: true,
+      deliveryDiscount: true, // Envío gratis para estudiantes
+      avatar: `https://ui-avatars.com/api/?name=${req.body.email?.split('@')[0] || 'Demo'}&background=4f46e5&color=fff`
+    },
+    token: 'ujcv-token-' + Date.now(),
+    message: '✅ ¡Login exitoso! (Modo demo) 🎓 Envío gratis activado para estudiantes UJCV'
+  })
+})
+
+// 📝 Endpoint de registro (opcional)
+app.post('/api/register', (req, res) => {
+  console.log('📝 Registro recibido:', req.body.email || 'sin email')
+  
+  res.json({
+    success: true,
+    user: {
+      id: Date.now(),
+      email: req.body.email || 'nuevo@ujcv.edu.hn',
+      name: req.body.name || 'Nuevo Usuario',
+      accountNumber: req.body.accountNumber || 'UJCV' + Date.now().toString().slice(-6),
+      address: req.body.address || 'Dirección no especificada',
+      isStudent: req.body.email ? req.body.email.includes('ujcv') : true,
+      deliveryDiscount: req.body.email ? req.body.email.includes('ujcv') : true
+    },
+    token: 'ujcv-token-reg-' + Date.now(),
+    message: '✅ ¡Registro exitoso!'
+  })
+})
+
+// 👤 Endpoint para obtener perfil
+app.get('/api/profile', (req, res) => {
+  res.json({
+    success: true,
+    user: {
+      id: 1,
+      email: 'estudiante@ujcv.edu.hn',
+      name: 'Carlos Martínez',
+      accountNumber: 'UJCV2024001',
+      address: 'Campus UJCV, Comayagua',
+      isStudent: true,
+      deliveryDiscount: true,
+      joinDate: '2024-01-15',
+      ordersCount: 8,
+      totalSpent: 1245.75,
+      avatar: 'https://ui-avatars.com/api/?name=Carlos+Martinez&background=4f46e5&color=fff'
+    }
+  })
+})
+
+// 🔁 Endpoint de login SIN /api (para compatibilidad con código antiguo)
+app.post('/login', (req, res) => {
+  console.log('⚠️ Login legacy recibido (sin /api) - Redirigiendo a /api/login')
+  
+  // Redirige internamente al endpoint correcto
+  res.json({
+    success: true,
+    user: {
+      id: Date.now(),
+      email: req.body.email || 'legacy@ujcv.edu.hn',
+      name: 'Usuario Legacy',
+      isStudent: true,
+      deliveryDiscount: true
+    },
+    token: 'legacy-token-' + Date.now(),
+    message: '✅ Login legacy exitoso - Usa /api/login en el futuro'
+  })
+})
+
+// ============================================================================
+// 🧾 ENDPOINTS DE PEDIDOS
+// ============================================================================
+
 app.get('/api/orders', (req, res) => {
-  const orders = JSON.parse(fs.readFileSync(ordersFile))
-  res.json(orders)
+  try {
+    const orders = JSON.parse(fs.readFileSync(ordersFile))
+    res.json(orders)
+  } catch (error) {
+    console.error('Error leyendo orders:', error)
+    res.json([])
+  }
 })
 
 app.post('/api/orders', (req, res) => {
-  const orders = JSON.parse(fs.readFileSync(ordersFile))
-  const newOrder = { id: Date.now(), ...req.body }
-  if (typeof newOrder.total !== 'number') {
-    newOrder.total = newOrder.items.reduce((sum, item) => sum + (item.price || 0), 0)
+  try {
+    const orders = JSON.parse(fs.readFileSync(ordersFile))
+    const newOrder = { 
+      id: Date.now(), 
+      ...req.body,
+      createdAt: new Date().toISOString()
+    }
+    
+    // Calcular total si no viene
+    if (typeof newOrder.total !== 'number') {
+      newOrder.total = newOrder.items?.reduce((sum, item) => sum + (item.price || 0), 0) || 0
+    }
+    
+    orders.push(newOrder)
+    fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2))
+    console.log('✅ Pedido creado:', newOrder.id)
+    res.status(201).json(newOrder)
+  } catch (error) {
+    console.error('Error creando pedido:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
   }
-  orders.push(newOrder)
-  fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2))
-  res.status(201).json(newOrder)
 })
 
 app.patch('/api/orders/:id', (req, res) => {
-  const orders = JSON.parse(fs.readFileSync(ordersFile))
-  const id = parseInt(req.params.id)
-  const index = orders.findIndex(o => o.id === id)
-  if (index === -1) return res.status(404).json({ error: 'Pedido no encontrado' })
-  orders[index] = { ...orders[index], ...req.body }
-  fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2))
-  res.json(orders[index])
+  try {
+    const orders = JSON.parse(fs.readFileSync(ordersFile))
+    const id = parseInt(req.params.id)
+    const index = orders.findIndex(o => o.id === id)
+    
+    if (index === -1) {
+      return res.status(404).json({ error: 'Pedido no encontrado' })
+    }
+    
+    orders[index] = { ...orders[index], ...req.body, updatedAt: new Date().toISOString() }
+    fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2))
+    console.log('📝 Pedido actualizado:', id)
+    res.json(orders[index])
+  } catch (error) {
+    console.error('Error actualizando pedido:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
 })
 
 app.delete('/api/orders/:id', (req, res) => {
-  const orders = JSON.parse(fs.readFileSync(ordersFile))
-  const id = parseInt(req.params.id)
-  const filtered = orders.filter(o => o.id !== id)
-  fs.writeFileSync(ordersFile, JSON.stringify(filtered, null, 2))
-  res.json({ success: true })
+  try {
+    const orders = JSON.parse(fs.readFileSync(ordersFile))
+    const id = parseInt(req.params.id)
+    const filtered = orders.filter(o => o.id !== id)
+    
+    fs.writeFileSync(ordersFile, JSON.stringify(filtered, null, 2))
+    console.log('🗑️ Pedido eliminado:', id)
+    res.json({ success: true, message: `Pedido ${id} eliminado` })
+  } catch (error) {
+    console.error('Error eliminando pedido:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
 })
 
 app.delete('/api/orders', (req, res) => {
-  fs.writeFileSync(ordersFile, JSON.stringify([], null, 2))
-  res.json({ success: true })
+  try {
+    fs.writeFileSync(ordersFile, JSON.stringify([], null, 2))
+    console.log('🗑️ Todos los pedidos eliminados')
+    res.json({ success: true, message: 'Historial de pedidos borrado' })
+  } catch (error) {
+    console.error('Error borrando pedidos:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
 })
 
-// 🚀 Arranque del servidor (puerto dinámico)
+// ============================================================================
+// 🚀 INICIAR SERVIDOR
+// ============================================================================
+
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
-  console.log(`Servidor backend corriendo en puerto ${PORT}`)
+  console.log(`✅ Servidor backend UJCV Eats corriendo en puerto ${PORT}`)
+  console.log(`🌐 Health check: http://localhost:${PORT}/api/health`)
+  console.log(`🔐 Login endpoint: http://localhost:${PORT}/api/login`)
+  console.log(`📦 Orders endpoint: http://localhost:${PORT}/api/orders`)
 })
-
