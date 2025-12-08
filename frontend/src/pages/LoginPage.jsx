@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../context/ToastProvider'
 import { useAuth } from '../context/AuthContext'
@@ -7,9 +7,26 @@ function LoginPage() {
   const [email, setEmail] = useState('')
   const [accountNumber, setAccountNumber] = useState('')
   const [address, setAddress] = useState('Dirección de ejemplo')
+  const [isMobile, setIsMobile] = useState(false) // ← Nuevo estado
   const navigate = useNavigate()
   const { show } = useToast()
   const { login } = useAuth()
+
+  // Detectamos el tamaño de pantalla
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    // Verificación inicial
+    checkMobile()
+    
+    // Event listener para cambios de tamaño
+    window.addEventListener('resize', checkMobile)
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const handleLogin = () => {
     if (!email || !accountNumber) {
@@ -25,13 +42,8 @@ function LoginPage() {
     }
 
     login(userData)
-
-    // ✅ Primero el mensaje de éxito (arriba)
     show('✅ Sesión iniciada', 'success', 3000)
-
-    // ⚠️ Luego el mensaje de advertencia (debajo)
     show('⚠️ Este es un proyecto de ejemplo. Los datos no son reales ni se validan.', 'warning', 5000)
-
     navigate('/')
   }
 
@@ -42,14 +54,14 @@ function LoginPage() {
         height: '100vh',
         width: '100vw',
         overflow: 'hidden',
-        flexDirection: window.innerWidth < 768 ? 'column' : 'row'
+        flexDirection: isMobile ? 'column' : 'row' // ← Usamos estado
       }}
     >
       {/* Izquierda: formulario */}
       <div
         style={{
-          width: window.innerWidth < 768 ? '100%' : '320px',
-          padding: window.innerWidth < 768 ? '1.5rem' : '2rem 1.5rem 2rem 2rem',
+          width: isMobile ? '100%' : '320px',
+          padding: isMobile ? '1.5rem' : '2rem 1.5rem 2rem 2rem',
           background: '#fff',
           display: 'flex',
           flexDirection: 'column',
@@ -62,7 +74,7 @@ function LoginPage() {
           style={{
             fontSize: '1.4rem',
             marginBottom: '1rem',
-            textAlign: window.innerWidth < 768 ? 'center' : 'left'
+            textAlign: isMobile ? 'center' : 'left'
           }}
         >
           🔐 Iniciar sesión
@@ -87,16 +99,17 @@ function LoginPage() {
       </div>
 
       {/* Derecha: imagen decorativa */}
-      <div
-        style={{
-          flex: 1,
-          backgroundImage: 'url("/images/login-visual.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          display: window.innerWidth < 768 ? 'none' : 'block'
-        }}
-      />
+      {!isMobile && ( // ← Mejor condición
+        <div
+          style={{
+            flex: 1,
+            backgroundImage: 'url("/images/login-visual.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+      )}
     </div>
   )
 }
